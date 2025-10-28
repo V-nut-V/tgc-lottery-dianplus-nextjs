@@ -1,0 +1,97 @@
+/* ================= Reset Browsers Default Style ================= */
+* {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+html {
+  box-sizing: border-box; 
+  width: 100%;
+  height: 100%;
+  font-size: 80%;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  font-family: "myFont", sans-serif;
+  font-weight: 400;
+  background: linear-gradient(to bottom, #e0f7fa, #ffffff);
+  background-size: cover;
+  background-repeat: no-repeat;
+  /* background-color: var(--background-color); */
+  color: var(--text-color);
+}
+
+input::placeholder {
+  font-family: "myFont"!important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500;
+}
+
+h1 {
+  font-size: 3.6rem;
+  margin-bottom: 1.6rem;
+}
+
+h2 {
+  font-size: 3.2rem;
+  margin-bottom: 1.4rem;
+}
+
+h3 {
+  font-size: 2.8rem;
+  margin-bottom: 1.2rem;
+}
+
+h4 {
+  font-size: 2.4rem;
+  margin-bottom: 1rem;
+}
+
+h5 {
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+}
+
+h6 {
+  font-size: 1.8rem;
+  margin-bottom: 0.6rem;
+}
+
+p {
+  font-size: 1.8rem;
+  margin-bottom: 1.4rem;
+}
+
+button {
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+
+/* ================= Global Cutome Class ================= */
+.container {
+  width: 80%;
+  max-width: 120rem;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+:root {
+  --primary-color: #1677FF;
+  --secondary-color: #F0F0F0;
+  --text-color: #333333;
+  --background-color: #F5F5F5;
+  --error-color: #FF4D4F;
+  --success-color: #52C41A;
+  --warning-color: #FAAD14;
+}
