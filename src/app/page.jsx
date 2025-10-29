@@ -58,7 +58,9 @@ export default function Home() {
       console.log("fetch spent", spent);
       try {
         const retailSpentAmount = await fetch(
-          `/api/external?code=${invoiceNumber}`,
+          `${
+            process.env.NEXT_PUBLIC_SUB_BASE_PATH && ""
+          }/api/external?code=${invoiceNumber}`,
           {
             method: "GET",
             cache: "no-store",
