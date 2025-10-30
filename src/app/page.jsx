@@ -55,11 +55,11 @@ export default function Home() {
     // 0. 通过小票号码获取消费金额（也检查了小票号码合法性）
     // 只获取一次，如果已经获取了就不再请求获取，跳过
     if (!spent) {
-      console.log("fetch spent", spent);
+      console.log("fetch spent", spent, process.env.NEXT_PUBLIC_SUB_BASE_PATH);
       try {
         const retailSpentAmount = await fetch(
           `${
-            process.env.NEXT_PUBLIC_SUB_BASE_PATH && ""
+            process.env.NEXT_PUBLIC_SUB_BASE_PATH || ""
           }/api/external?code=${invoiceNumber}`,
           {
             method: "GET",
