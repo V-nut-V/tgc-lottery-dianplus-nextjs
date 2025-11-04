@@ -78,6 +78,11 @@ export default function Home() {
       }
     }
 
+    if (spentAmount == 0 || spent == 0) {
+      Stop("此小票无有效消费金额，无法抽奖");
+      return;
+    }
+
     try {
       const preHistory = await getHistory(invoiceNumber);
       setHistory(preHistory);
@@ -186,7 +191,8 @@ export default function Home() {
             placeholder="小票号码"
             value={invoiceNumber}
             onChange={(e) => {
-              setInvoiceNumber(e.target.value);
+              const value = e.target.value.replace(/\s+/g, ""); // 去掉所有空格
+              setInvoiceNumber(value);
               setRollingText(store.Dashboard_Title);
               setHistory([]);
               setSpent("");
