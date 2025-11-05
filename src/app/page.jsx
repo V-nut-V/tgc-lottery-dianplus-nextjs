@@ -40,7 +40,7 @@ export default function Home() {
     return local;
   }
 
-  const rolling = async (invoiceNumber) => {
+  const rolling = async (invoiceNumber, auto) => {
     finalPrizeRef.current = null;
     setLoading(true);
     let currentHistory = [];
@@ -50,12 +50,12 @@ export default function Home() {
       Stop(store.Dashboard_Title);
       return;
     }
-    setRollingText("准备中...");
+    setRollingText("准备抽奖中...");
 
     // 0. 通过小票号码获取消费金额（也检查了小票号码合法性）
     // 只获取一次，如果已经获取了就不再请求获取，跳过
     if (!spent) {
-      console.log("fetch spent", spent, process.env.NEXT_PUBLIC_SUB_BASE_PATH);
+      setRollingText("较对中...");
       try {
         const retailSpentAmount = await fetch(
           `${
@@ -76,10 +76,19 @@ export default function Home() {
         Stop("请再尝试或联系开发人员[Failed to sumDealPrice]");
         return;
       }
+    } else {
+      spentAmount = spent;
     }
 
-    if (spentAmount == 0 || spent == 0) {
+    console.log("spentAmount", spentAmount, "spent", spent, spent == 0);
+
+    if (spentAmount == 0) {
       Stop("此小票无有效消费金额，无法抽奖");
+      return;
+    }
+
+    if (auto) {
+      Stop(`消费金额为：${spentAmount} 元`);
       return;
     }
 
@@ -134,7 +143,7 @@ export default function Home() {
           Store_Name: store.Store_Name,
           Store_ID: store.Store_ID,
           Prize_Name: selected.Name,
-          Spent: spent.toString(),
+          Spent: spent.toString() || spentAmount.toString(),
           Create_Date: getChinaISOTime(),
         }),
       ]);
@@ -194,6 +203,10 @@ export default function Home() {
               const value = e.target.value.replace(/\s+/g, ""); // 去掉所有空格
               setInvoiceNumber(value);
               setRollingText(store.Dashboard_Title);
+              if (value.length === 19) {
+                console.log("19 Charactors, Start Auto Rolling");
+                rolling(value, true);
+              } 
               setHistory([]);
               setSpent("");
             }}
