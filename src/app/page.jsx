@@ -43,6 +43,7 @@ export default function Home() {
   const rolling = async (invoiceNumber, auto) => {
     if (!(store.Min_Spent > 0)) {
       setRollingText("请先设定最低消费抽奖金额");
+      return;
     }
 
     finalPrizeRef.current = null;
