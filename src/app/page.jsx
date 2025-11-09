@@ -23,9 +23,9 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const finalPrizeRef = useRef(null);
   const [history, setHistory] = useState([]);
-  const { store, setStore, getStore, updateStore, getHistory, postHistory } = useContext(StoreContext);
+  const { store, setStore, getStore, updateStore, getHistory, postHistory } =
+    useContext(StoreContext);
   const [rollingText, setRollingText] = useState(store.Dashboard_Title);
-  
 
   useEffect(() => {
     if (!store.Store_ID) router.push("/store");
@@ -41,6 +41,10 @@ export default function Home() {
   }
 
   const rolling = async (invoiceNumber, auto) => {
+    if (!(store.Min_Spent > 0)) {
+      setRollingText("请先设定最低消费抽奖金额");
+    }
+
     finalPrizeRef.current = null;
     setLoading(true);
     let currentHistory = [];
@@ -82,7 +86,8 @@ export default function Home() {
 
     console.log("spentAmount", spentAmount, "spent", spent, spent == 0);
 
-    if (spentAmount == 0) {
+    if (spentAmount == 0 || typeof spentAmount === "object") {
+      setSpent("");
       Stop("此小票无有效消费金额，无法抽奖");
       return;
     }
@@ -206,7 +211,7 @@ export default function Home() {
               if (value.length === 19) {
                 console.log("19 Charactors, Start Auto Rolling");
                 rolling(value, true);
-              } 
+              }
               setHistory([]);
               setSpent("");
             }}
