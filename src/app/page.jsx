@@ -26,26 +26,26 @@ export default function Home() {
   const { store, setStore, getStore, updateStore, getHistory, postHistory } =
     useContext(StoreContext);
   const [rollingText, setRollingText] = useState(store.Dashboard_Title);
+  const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
     if (!store.Store_ID) router.push("/store");
   }, []);
 
   function getChinaISOTime() {
-    const date = new Date();
-    const offsetMs = 8 * 60 * 60 * 1000; // UTC+8
-    const local = new Date(date.getTime() + offsetMs)
-      .toISOString()
-      .replace("Z", "+08:00");
-    return local;
+    // Return UTC ISO string. Strapi stores/normalizes dates to UTC, so send UTC
+    // to avoid ambiguity. If you want to display China time later, format
+    // the UTC value on the client using a timezone-aware formatter.
+    return new Date().toISOString();
   }
 
   const rolling = async (invoiceNumber, auto) => {
     if (!(store.Min_Spent > 0)) {
-      setRollingText("请先设定最低消费抽奖金额");
+      Stop("请先设定最低消费抽奖金额");
       return;
     }
 
+    setDisabled(true);
     finalPrizeRef.current = null;
     setLoading(true);
     let currentHistory = [];
@@ -173,6 +173,7 @@ export default function Home() {
     function Stop(message) {
       setRollingText(message);
       setLoading(false);
+      setDisabled(false);
       if (currentHistory?.length > 0) {
         setHistory(currentHistory);
       }
@@ -205,6 +206,7 @@ export default function Home() {
             style={{ width: "30rem", minWidth: "450px" }}
             placeholder="小票号码"
             value={invoiceNumber}
+            disabled={disabled}
             onChange={(e) => {
               const value = e.target.value.replace(/\s+/g, ""); // 去掉所有空格
               setInvoiceNumber(value);
